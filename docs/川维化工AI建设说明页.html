@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>川维化工企业级 AI 平台落地建设方案</title>
+  <style>
+    * { box-sizing: border-box; }
+    :root {
+      --blue: #1a73e8;
+      --blue-2: #4285f4;
+      --green: #34a853;
+      --yellow: #fbbc04;
+      --red: #ea4335;
+      --ink: #202124;
+      --text: #3c4043;
+      --muted: #5f6368;
+      --line: #dadce0;
+      --bg: #f8fafd;
+      --panel: #ffffff;
+      --soft-blue: #e8f0fe;
+      --soft-green: #e6f4ea;
+      --soft-yellow: #fef7e0;
+      --soft-red: #fce8e6;
+      --shadow: 0 12px 32px rgba(60, 64, 67, 0.12);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 10% 0%, rgba(66, 133, 244, .12), transparent 28%),
+        radial-gradient(circle at 82% 18%, rgba(52, 168, 83, .10), transparent 26%),
+        linear-gradient(180deg, #fff 0%, var(--bg) 42%, #fff 100%);
+      font-family: "Google Sans", "Avenir Next", "PingFang SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.65;
+    }
+    a { color: inherit; text-decoration: none; }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: rgba(255, 255, 255, .88);
+      border-bottom: 1px solid rgba(218, 220, 224, .8);
+      backdrop-filter: blur(14px);
+    }
+    .nav {
+      max-width: 1220px;
+      margin: 0 auto;
+      height: 64px;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 700; color: var(--ink); white-space: nowrap; }
+    .gmark {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 800;
+      background: conic-gradient(from 45deg, var(--blue), var(--green), var(--yellow), var(--red), var(--blue));
+      box-shadow: 0 8px 22px rgba(66, 133, 244, .22);
+    }
+    .links { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; font-size: 13px; color: var(--muted); }
+    .links a { padding: 8px 10px; border-radius: 999px; }
+    .links a:hover { background: #f1f3f4; color: var(--ink); }
+    .wrap { max-width: 1220px; margin: 0 auto; padding: 0 24px; }
+    .hero { padding: 58px 24px 30px; display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(320px, .92fr); gap: 28px; align-items: stretch; }
+    .eyebrow { color: var(--blue); font-size: 14px; font-weight: 800; margin: 0 0 14px; letter-spacing: .2px; }
+    h1 {
+      margin: 0;
+      color: var(--ink);
+      font-size: clamp(34px, 5vw, 68px);
+      line-height: 1.05;
+      letter-spacing: -1px;
+      font-weight: 760;
+    }
+    .lead { margin: 22px 0 0; max-width: 780px; color: var(--muted); font-size: 18px; }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: var(--blue);
+      color: #fff;
+      font-weight: 700;
+      box-shadow: 0 8px 22px rgba(26, 115, 232, .24);
+    }
+    .btn.secondary { background: #fff; color: var(--blue); border: 1px solid var(--line); box-shadow: none; }
+    .hero-card, .card {
+      background: rgba(255, 255, 255, .92);
+      border: 1px solid rgba(218, 220, 224, .86);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+    }
+    .hero-card { padding: 24px; display: grid; gap: 16px; }
+    .snapshot {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .snap {
+      border-radius: 20px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      background: #fff;
+      min-height: 112px;
+    }
+    .snap b { display: block; color: var(--ink); font-size: 28px; line-height: 1.1; margin-bottom: 7px; }
+    .snap span { color: var(--muted); font-size: 13px; }
+    .snap.blue { background: var(--soft-blue); border-color: #d2e3fc; }
+    .snap.green { background: var(--soft-green); border-color: #cce8d4; }
+    .snap.yellow { background: var(--soft-yellow); border-color: #fde293; }
+    .snap.red { background: var(--soft-red); border-color: #fad2cf; }
+    section { padding: 44px 0; }
+    .section-head { display: grid; grid-template-columns: minmax(0, .9fr) minmax(280px, .55fr); gap: 24px; align-items: end; margin-bottom: 20px; }
+    h2 { margin: 0; color: var(--ink); font-size: clamp(26px, 3.2vw, 42px); line-height: 1.15; letter-spacing: -.4px; }
+    .section-note { margin: 0; color: var(--muted); font-size: 15px; }
+    .grid { display: grid; gap: 16px; }
+    .cols-2 { grid-template-columns: repeat(2, 1fr); }
+    .cols-3 { grid-template-columns: repeat(3, 1fr); }
+    .cols-4 { grid-template-columns: repeat(4, 1fr); }
+    .card { padding: 22px; }
+    .card.flat { box-shadow: none; border-radius: 22px; }
+    .card h3 { margin: 0 0 8px; color: var(--ink); font-size: 18px; line-height: 1.35; }
+    .card p, .card li { color: var(--muted); font-size: 14px; }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 12px;
+      color: var(--blue);
+      background: var(--soft-blue);
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .tag.green { color: var(--green); background: var(--soft-green); }
+    .tag.yellow { color: #b06000; background: var(--soft-yellow); }
+    .tag.red { color: var(--red); background: var(--soft-red); }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+    ul { margin: 10px 0 0; padding-left: 20px; }
+    .pain-grid { counter-reset: pain; }
+    .pain { position: relative; overflow: hidden; }
+    .pain::after {
+      counter-increment: pain;
+      content: "0" counter(pain);
+      position: absolute;
+      right: 18px;
+      top: 12px;
+      font-size: 44px;
+      color: rgba(60,64,67,.06);
+      font-weight: 800;
+    }
+    .flow {
+      display: grid;
+      grid-template-columns: 1fr 42px 1fr 42px 1fr 42px 1fr;
+      align-items: center;
+      gap: 10px;
+    }
+    .flow-card {
+      min-height: 170px;
+      border-radius: 24px;
+      padding: 20px;
+      background: #fff;
+      border: 1px solid var(--line);
+      box-shadow: 0 8px 20px rgba(60, 64, 67, .08);
+    }
+    .arrow {
+      height: 42px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: #fff;
+      border: 1px solid var(--line);
+      color: var(--blue);
+      font-weight: 900;
+    }
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+    .phase {
+      border-radius: 28px;
+      background: #fff;
+      border: 1px solid var(--line);
+      padding: 22px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    .phase::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 6px; }
+    .phase:nth-child(1)::before { background: var(--blue); }
+    .phase:nth-child(2)::before { background: var(--green); }
+    .phase:nth-child(3)::before { background: var(--yellow); }
+    .phase b { display: block; color: var(--ink); font-size: 38px; line-height: 1; margin: 8px 0 10px; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    th, td {
+      padding: 14px;
+      border-bottom: 1px solid var(--line);
+      border-right: 1px solid var(--line);
+      vertical-align: top;
+      text-align: left;
+      font-size: 14px;
+    }
+    th { color: var(--ink); background: #f1f3f4; font-weight: 800; }
+    td { color: var(--muted); }
+    tr:last-child td { border-bottom: 0; }
+    th:last-child, td:last-child { border-right: 0; }
+    .table-wrap { overflow-x: auto; }
+    .cockpit {
+      display: grid;
+      grid-template-columns: 1.08fr .92fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+    .screen {
+      border-radius: 30px;
+      background:
+        linear-gradient(145deg, #ffffff 0%, #f8fbff 100%);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      min-height: 430px;
+    }
+    .metric-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 18px; }
+    .metric {
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: #fff;
+      padding: 18px;
+    }
+    .metric strong { display: block; color: var(--blue); font-size: 30px; margin-bottom: 4px; }
+    .metric span { color: var(--muted); font-size: 13px; }
+    .bar { display: grid; grid-template-columns: 100px 1fr 42px; gap: 10px; align-items: center; margin-top: 16px; color: var(--muted); font-size: 13px; }
+    .track { height: 9px; border-radius: 999px; background: #eef1f4; overflow: hidden; }
+    .fill { height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--blue), var(--green)); }
+    .ask-list { display: grid; gap: 14px; }
+    .ask {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 18px;
+      box-shadow: 0 8px 20px rgba(60, 64, 67, .08);
+      border-left: 6px solid var(--blue);
+    }
+    .ask:nth-child(2) { border-left-color: var(--green); }
+    .ask:nth-child(3) { border-left-color: var(--yellow); }
+    .ask:nth-child(4) { border-left-color: var(--red); }
+    .ask strong { display: block; color: var(--ink); margin-bottom: 5px; }
+    .ask span { color: var(--muted); font-size: 14px; }
+    .speech {
+      border-radius: 28px;
+      background: linear-gradient(135deg, var(--soft-blue), #fff);
+      border: 1px solid #d2e3fc;
+      padding: 24px;
+    }
+    .footer { padding: 26px 0 44px; color: var(--muted); font-size: 13px; border-top: 1px solid var(--line); margin-top: 30px; }
+    @media (max-width: 980px) {
+      .hero, .section-head, .cockpit { grid-template-columns: 1fr; }
+      .cols-4, .cols-3, .timeline, .metric-grid { grid-template-columns: repeat(2, 1fr); }
+      .flow { grid-template-columns: 1fr; }
+      .arrow { transform: rotate(90deg); margin: 0 auto; }
+    }
+    @media (max-width: 640px) {
+      .nav { height: auto; padding: 14px 18px; flex-direction: column; align-items: flex-start; }
+      .links { justify-content: flex-start; }
+      .hero { padding-top: 36px; }
+      .cols-4, .cols-3, .cols-2, .timeline, .snapshot, .metric-grid { grid-template-columns: 1fr; }
+      h1 { font-size: 38px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <nav class="nav">
+      <a class="brand" href="#top">
+        <span class="gmark">AI</span>
+        <span>川维化工 AI 平台方案</span>
+      </a>
+      <div class="links">
+        <a href="#why">为什么建</a>
+        <a href="#architecture">四层架构</a>
+        <a href="#roadmap">三阶段落地</a>
+        <a href="#agents">岗位智能体</a>
+        <a href="#governance">权限治理</a>
+        <a href="#cockpit">领导驾驶舱</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero wrap">
+      <div>
+        <p class="eyebrow">拜访信息科主任专用 · 由简入深 · 不推翻现有系统</p>
+        <h1>川维化工集团企业级 AI 平台落地建设方案</h1>
+        <p class="lead">
+          基于川维已建成的数据驾驶舱、ERP、MES、WMS、LIMS、热电管控、智能巡检、销售数据分析、统一数据仓库和微应用平台，叠加企业级 AI 能力：先解决文档检索和知识复用，再建设双知识底座，最后落地生产、安环、设备、销售、信息科专属智能体。
+        </p>
+        <div class="actions">
+          <a class="btn" href="#roadmap">查看落地节奏</a>
+          <a class="btn secondary" href="#talk">查看主任沟通话术</a>
+        </div>
+      </div>
+      <aside class="hero-card">
+        <div class="snapshot">
+          <div class="snap blue"><b>80+</b><span>专业业务子系统，不替换，做 AI 上层赋能</span></div>
+          <div class="snap green"><b>1个月</b><span>轻量化试点，快速验证文档问答价值</span></div>
+          <div class="snap yellow"><b>3个月</b><span>建设数据湖、化工本体、知识图谱双底座</span></div>
+          <div class="snap red"><b>5类</b><span>生产、安环、设备、销售、信息科智能体</span></div>
+        </div>
+        <div class="card flat" style="background:#f8fafd">
+          <span class="tag"><span class="dot"></span>核心定位</span>
+          <p>不是重建信息化系统，而是在现有数字化成果之上，建设“数据可汇聚、文档可理解、关系可追溯、任务可自动化”的 AI 智能能力层。</p>
+        </div>
+      </aside>
+    </section>
+
+    <section id="why" class="wrap">
+      <div class="section-head">
+        <h2>为什么建：川维当前最适合做“上层 AI 叠加”</h2>
+        <p class="section-note">川维已经有较好的信息化基础，AI 项目不应从零推倒重来，而应围绕现有数据仓库、业务系统和文档资产，解决跨系统取数、文档检索、业务关联和自动化执行问题。</p>
+      </div>
+      <div class="grid cols-4 pain-grid">
+        <article class="card pain"><span class="tag">物理数据孤岛</span><h3>80 余套系统分散</h3><p>跨装置、跨部门取数仍需人工导出合并，报表耗时久，口径容易不统一。</p></article>
+        <article class="card pain"><span class="tag green">文档语义孤岛</span><h3>资料查不全、查不准</h3><p>工艺 SOP、设备图纸、安环规程、故障案例、巡检记录分散，关键词检索难以覆盖同义表达。</p></article>
+        <article class="card pain"><span class="tag yellow">业务逻辑孤岛</span><h3>关系链无法一键拉通</h3><p>设备、装置、工单、隐患、备件、客户、合同之间缺少标准化关联关系。</p></article>
+        <article class="card pain"><span class="tag red">执行效率孤岛</span><h3>多系统切换靠人工</h3><p>生产调度、安环核查、设备维保、销售测算、合规材料仍需人工整理。</p></article>
+      </div>
+      <div class="card" style="margin-top:16px">
+        <span class="tag red"><span class="dot"></span>长期风险</span>
+        <h3>知识流失风险</h3>
+        <p>化工企业高度依赖资深工艺、设备、安全专家经验。若没有数字化沉淀载体，老师傅经验难以传承，新人遇到复杂问题时只能反复找人、翻资料、问历史。</p>
+      </div>
+    </section>
+
+    <section id="architecture" class="wrap">
+      <div class="section-head">
+        <h2>怎么建：四层架构，由简入深</h2>
+        <p class="section-note">沿用企业级 AI 方法论：工程层解决数据归集，语义层解决文档检索，知识层解决业务关系，应用层解决岗位执行。</p>
+      </div>
+      <div class="flow">
+        <div class="flow-card"><span class="tag">工程层</span><h3>数据湖统一归集</h3><p>复用现有 EDW、数据仓库、网盘、档案服务器，通过 API + ETL 归集结构化和非结构化数据。</p></div>
+        <div class="arrow">→</div>
+        <div class="flow-card"><span class="tag green">语义层</span><h3>向量知识库 RAG</h3><p>私有化嵌入模型、文档清洗切片、向量检索，让岗位人员用大白话查规程、图纸、案例。</p></div>
+        <div class="arrow">→</div>
+        <div class="flow-card"><span class="tag yellow">知识层</span><h3>化工本体 + 知识图谱</h3><p>定义装置、设备、隐患、工单、人员、合同等实体关系，LLM 离线抽取持续更新图谱。</p></div>
+        <div class="arrow">→</div>
+        <div class="flow-card"><span class="tag red">应用层</span><h3>部门 AI 智能体</h3><p>生产、安环、设备、销售、信息科智能体自动调度知识库、图谱、数据库和系统 API。</p></div>
+      </div>
+    </section>
+
+    <section id="roadmap" class="wrap">
+      <div class="section-head">
+        <h2>先建什么后建什么：三阶段低风险落地</h2>
+        <p class="section-note">信息科主任最关心的是风险、投入、见效周期和是否影响现有系统。建议从轻量化试点开始，逐步扩大。</p>
+      </div>
+      <div class="timeline">
+        <article class="phase">
+          <b>01</b>
+          <h3>轻量化试点，1 个月</h3>
+          <p>最小成本验证价值，不改动成熟业务系统。</p>
+          <ul>
+            <li>对接 EDW、网盘、档案服务器</li>
+            <li>归集 SOP、检修手册、安全预案、隐患台账、故障处置单</li>
+            <li>搭建私有化嵌入模型 + 向量知识库</li>
+            <li>上线轻量化 RAG 问答门户，集成统一登录</li>
+            <li>交付信息科运维后台：同步、向量更新、监控</li>
+          </ul>
+        </article>
+        <article class="phase">
+          <b>02</b>
+          <h3>双知识底座，3 个月</h3>
+          <p>形成全企业 AI 的长期核心底座。</p>
+          <ul>
+            <li>全覆盖接入 MES、ERP、WMS、热电、巡检、LIMS、销售、承包商系统</li>
+            <li>建立装置、设备位号、产品牌号、风险等级、岗位、客户统一编码</li>
+            <li>扩展全量文档向量化与术语归一</li>
+            <li>搭建化工专属业务本体 Schema</li>
+            <li>建设定时离线 LLM 抽取流水线和知识图谱</li>
+          </ul>
+        </article>
+        <article class="phase">
+          <b>03</b>
+          <h3>部门智能体，2 个月</h3>
+          <p>让业务价值全面释放，形成岗位数字助手。</p>
+          <ul>
+            <li>上线生产调度、安环、设备、销售经营、信息科运维智能体</li>
+            <li>接入业务数据库和现有系统 API</li>
+            <li>自动生成调度分析、合规自查、维保计划、经营简报、运维周报</li>
+            <li>建立岗位权限、审计留痕和效果评测机制</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="data" class="wrap">
+      <div class="section-head">
+        <h2>第二阶段核心：把川维业务知识标准化</h2>
+        <p class="section-note">本体不是模型自由发挥，而是企业 AI 的业务标准。它定义“川维有哪些对象、对象有什么属性、对象之间是什么关系、哪些规则不能突破”。</p>
+      </div>
+      <div class="grid cols-2">
+        <div class="card">
+          <span class="tag">实体类型</span>
+          <h3>覆盖生产、安环、运维、经营</h3>
+          <ul>
+            <li>生产类：装置、反应釜、压缩机、机泵、精馏塔</li>
+            <li>安环类：风险点、隐患、特种作业、泄漏事故、应急预案</li>
+            <li>运维类：设备、备件、巡检工单、维修记录、维保人员</li>
+            <li>经营类：产品、客户、采购合同、原料库存、销售订单</li>
+          </ul>
+        </div>
+        <div class="card">
+          <span class="tag green">标准关系</span>
+          <h3>让机器知道业务链路</h3>
+          <ul>
+            <li>设备 - 隶属于 - 装置</li>
+            <li>隐患 - 发生于 - 设备</li>
+            <li>工单 - 处置 - 隐患</li>
+            <li>人员 - 负责 - 装置</li>
+            <li>合同 - 采购 - 原料</li>
+            <li>产品 - 产自 - 装置</li>
+          </ul>
+        </div>
+        <div class="card">
+          <span class="tag yellow">业务约束</span>
+          <h3>用规则压住幻觉</h3>
+          <ul>
+            <li>一台设备归属唯一装置</li>
+            <li>一级隐患必须 24 小时闭环</li>
+            <li>高温高压设备季度强制巡检</li>
+            <li>终止合作客户合同单独归类</li>
+          </ul>
+        </div>
+        <div class="card">
+          <span class="tag red">离线抽取</span>
+          <h3>定时更新知识图谱</h3>
+          <ul>
+            <li>合同、工艺手册、制度：每日凌晨 2 点批量抽取</li>
+            <li>巡检工单、隐患记录、热电运行日志：每 2 小时增量同步</li>
+            <li>LLM 输出标准三元组，嵌入模型辅助实体消歧</li>
+            <li>校验本体约束，脏数据过滤告警后写入图谱</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="agents" class="wrap">
+      <div class="section-head">
+        <h2>第三阶段：五大岗位专属智能体</h2>
+        <p class="section-note">智能体不是让员工手动选择工具，而是由 AI 自动拆解任务、调用向量库、知识图谱、业务数据库和川维现有系统 API。</p>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>智能体</th>
+              <th>服务对象</th>
+              <th>典型问题</th>
+              <th>自动调用能力</th>
+              <th>业务价值</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>生产调度智能体</td>
+              <td>调度室、工艺员</td>
+              <td>汇总 2026 年上半年 VAE 装置所有超温停机隐患、处置工单、能耗损失</td>
+              <td>检索事故处置方案，关联装置-设备-隐患-工单链路，调取产量与能耗数据</td>
+              <td>早会、周调度材料自动汇总，减少跨系统导数</td>
+            </tr>
+            <tr>
+              <td>安环管理智能体</td>
+              <td>安全科、承包商管理</td>
+              <td>一键梳理全厂一级隐患闭环、特种作业合规资料、泄漏应急预案</td>
+              <td>调用 HSE、作业票、隐患台账、制度规程和图谱关系</td>
+              <td>自动核查整改是否符合规程，生成合规自查报告</td>
+            </tr>
+            <tr>
+              <td>设备维保智能体</td>
+              <td>设备科、检修班组</td>
+              <td>输入设备位号，调取图纸、历史故障、维保记录、备件库存和同类案例</td>
+              <td>调用 EAM、备件台账、检修记录、说明书和设备图谱</td>
+              <td>预测周期性故障，自动生成维保计划</td>
+            </tr>
+            <tr>
+              <td>销售经营智能体</td>
+              <td>销售、财务</td>
+              <td>整理 2025-2026 终止合作客户、产品合同、发货库存、边际贡献数据</td>
+              <td>调用 ERP、CRM、合同、库存、财务和销售分析数据</td>
+              <td>自动分析区域销量波动，输出经营分析简报</td>
+            </tr>
+            <tr>
+              <td>信息科运维智能体</td>
+              <td>信息科</td>
+              <td>汇总各业务系统故障记录、需求工单、接口异常日志，生成运维周报</td>
+              <td>调用工单、接口日志、历史改造方案、系统操作手册和制度</td>
+              <td>减轻信息科日常支撑压力，帮助新人快速上手</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="governance" class="wrap">
+      <div class="section-head">
+        <h2>横向部门与纵向权限：化工涉密必须可控</h2>
+        <p class="section-note">平台既要横向服务生产、安环、设备、销售、信息科，也要纵向区分领导、部门负责人、工程师、班组、一线岗位的数据可见范围和工具调用权限。</p>
+      </div>
+      <div class="grid cols-3">
+        <div class="card"><span class="tag">分级数据权限</span><h3>按岗位开放数据</h3><p>装置、安环、经营、客户、合同、工艺参数按岗位权限开放，杜绝涉密工艺与客户数据泄露。</p></div>
+        <div class="card"><span class="tag green">统一账号接入</span><h3>沿用现有登录体系</h3><p>对接统一身份认证，单点登录，岗位变更后权限自动调整，所有访问行为留痕。</p></div>
+        <div class="card"><span class="tag yellow">本体规则约束</span><h3>抑制模型幻觉</h3><p>故障、工艺、合同、隐患输出必须匹配真实台账与图谱关系，高风险建议保留来源依据。</p></div>
+      </div>
+    </section>
+
+    <section id="cockpit" class="wrap">
+      <div class="section-head">
+        <h2>领导驾驶舱：从看指标到问原因、追闭环</h2>
+        <p class="section-note">川维已有数据驾驶舱，AI 不替代它，而是在其上叠加自然语言问数、异常归因、风险提示和闭环追踪。</p>
+      </div>
+      <div class="cockpit">
+        <div class="screen">
+          <span class="tag">AI 驾驶舱能力</span>
+          <h3>领导一句话问数</h3>
+          <p>示例：“本周影响产量的前三类原因是什么？对应装置、责任部门和处置进度分别是什么？”</p>
+          <div class="metric-grid">
+            <div class="metric"><strong>生产</strong><span>装置负荷、产量、工艺指标、异常波动</span></div>
+            <div class="metric"><strong>安环</strong><span>隐患闭环、作业票风险、环保排放、应急事件</span></div>
+            <div class="metric"><strong>设备</strong><span>重复故障、检修计划、备件风险、设备健康</span></div>
+            <div class="metric"><strong>经营</strong><span>成本、库存、订单、利润、能耗单耗</span></div>
+          </div>
+          <div class="bar"><span>隐患闭环</span><div class="track"><div class="fill" style="width:86%"></div></div><em>86%</em></div>
+          <div class="bar"><span>知识命中</span><div class="track"><div class="fill" style="width:78%"></div></div><em>78%</em></div>
+          <div class="bar"><span>异常处置</span><div class="track"><div class="fill" style="width:64%"></div></div><em>64%</em></div>
+        </div>
+        <div class="ask-list">
+          <div class="ask"><strong>自动归因</strong><span>综合生产数据、设备记录、安环事件、质量批次和班组日志，生成可追溯分析摘要。</span></div>
+          <div class="ask"><strong>风险预警</strong><span>对隐患超期、设备重复故障、质量波动、库存异常、能耗偏离进行分级提示。</span></div>
+          <div class="ask"><strong>闭环跟踪</strong><span>将领导关注项转为待办、责任人、截止时间和复盘材料。</span></div>
+          <div class="ask"><strong>权限可控</strong><span>领导可看全局态势和授权明细，但关键审批和控制动作仍走正式流程。</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="ops" class="wrap">
+      <div class="section-head">
+        <h2>长期运维：平台自动增量更新</h2>
+        <p class="section-note">信息科长期只需要管理同步、监控、权限、知识更新和异常告警，业务人员无感使用最新数据。</p>
+      </div>
+      <div class="grid cols-4">
+        <div class="card"><span class="tag">业务侧增量</span><h3>每日同步</h3><p>MES、ERP、巡检系统每日新增数据自动进入数据湖。</p></div>
+        <div class="card"><span class="tag green">语义侧增量</span><h3>自动向量化</h3><p>新操作规程、工单自动切片向量化，更新向量库。</p></div>
+        <div class="card"><span class="tag yellow">知识侧增量</span><h3>夜间抽取</h3><p>定时 LLM 流水线抽取设备、隐患、合同图谱关系。</p></div>
+        <div class="card"><span class="tag red">应用侧无感</span><h3>智能体读取最新底座</h3><p>各部门智能体自动读取最新知识，用户无需手工更新。</p></div>
+      </div>
+    </section>
+
+    <section id="talk" class="wrap">
+      <div class="section-head">
+        <h2>向信息科主任沟通的核心话术</h2>
+        <p class="section-note">现场表达要避免“推倒重建”和“AI 万能”，强调保护既有投入、轻量试点、私有化安全、减轻信息科负担。</p>
+      </div>
+      <div class="speech">
+        <div class="grid cols-2">
+          <div class="card flat"><span class="tag">1</span><h3>不推翻现有系统</h3><p>川维已有驾驶舱、MES、WMS、数据仓库和微应用平台，我们是在上面做 AI 赋能叠加，保护前期信息化投入。</p></div>
+          <div class="card flat"><span class="tag green">2</span><h3>先试点，再扩大</h3><p>先用 1 个月做工艺、安环、设备文档问答，效果看得见，再申请后续底座预算。</p></div>
+          <div class="card flat"><span class="tag yellow">3</span><h3>私有化部署</h3><p>数据不出厂区内网，满足化工生产工艺、客户信息、合同资料的保密合规要求。</p></div>
+          <div class="card flat"><span class="tag red">4</span><h3>信息科自己也受益</h3><p>配套信息科运维智能体，自动整理系统故障、接口异常、需求工单和运维周报，降低科室支撑压力。</p></div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer wrap">
+      <p>生成日期：2026-06-16。说明：本页面基于用户提供的川维化工现有信息化基础、企业级 AI 方法论与拜访信息科主任场景整理，用于方案沟通和汇报展示。具体系统接口、权限范围、部署环境、数据清单和预算排期需以现场调研为准。</p>
+    </footer>
+  </main>
+</body>
+</html>
